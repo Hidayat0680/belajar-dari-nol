@@ -2,28 +2,55 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Presensi TTQ - FIX IDPPS</title>
+<title>Presensi - Enter Langsung Hadir</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}body{background:#f5f7fb}.input{width:100%;padding:12px;border:1.5px solid #e5e7eb;border-radius:10px;margin-bottom:8px;font-size:13px}.btn{padding:10px 16px;border:none;border-radius:10px;font-weight:bold;cursor:pointer;font-size:12px}.btn-green{background:#064e3b;color:white}.btn-blue{background:#0ea5e9;color:white}.btn-red{background:#ef4444;color:white}.hidden{display:none}.app{display:flex;min-height:100vh}.sidebar{width:240px;background:white;padding:20px;position:fixed;height:100vh}.menu a{display:block;padding:11px;border-radius:10px;text-decoration:none;color:#374151;margin-bottom:4px;cursor:pointer}.menu a.active{background:#064e3b;color:white}.main{margin-left:240px;flex:1;padding:20px}.card{background:white;border-radius:14px;padding:18px;margin-bottom:15px;box-shadow:0 2px 8px rgba(0,0,0,0.05)}.code{background:#064e3b;color:white;padding:4px 10px;border-radius:6px;font-weight:bold;font-family:monospace}.absen-input{font-size:32px;text-align:center;font-weight:bold;padding:18px;border:3px solid #064e3b;border-radius:14px;width:100%;letter-spacing:3px}
-table{width:100%;border-collapse:collapse}th,td{padding:9px;border-bottom:1px solid #f3f4f6;font-size:12px}th{background:#f9fafb;font-size:10px}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}body{background:#f5f7fb}.btn{padding:10px 16px;border:none;border-radius:10px;font-weight:bold;cursor:pointer;font-size:12px}.btn-green{background:#064e3b;color:white}.btn-blue{background:#0ea5e9;color:white}.btn-red{background:#ef4444;color:white}.app{display:flex;min-height:100vh}.sidebar{width:240px;background:white;padding:20px;position:fixed;height:100vh}.menu a{display:block;padding:11px;border-radius:10px;text-decoration:none;color:#374151;margin-bottom:4px;cursor:pointer}.menu a.active{background:#064e3b;color:white}.main{margin-left:240px;flex:1;padding:20px}.card{background:white;border-radius:14px;padding:18px;margin-bottom:15px;box-shadow:0 2px 8px rgba(0,0,0,0.05)}.code{background:#064e3b;color:white;padding:4px 10px;border-radius:6px;font-weight:bold;font-family:monospace}.absen-input{font-size:32px;text-align:center;font-weight:bold;padding:18px;border:3px solid #064e3b;border-radius:14px;width:100%;letter-spacing:3px;outline:none}.absen-input:focus{border-color:#22c55e;box-shadow:0 0 0 4px #dcfce7}table{width:100%;border-collapse:collapse}th,td{padding:9px;border-bottom:1px solid #f3f4f6;font-size:12px}th{background:#f9fafb;font-size:10px}.hidden{display:none}.input{width:100%;padding:10px;border:1.5px solid #e5e7eb;border-radius:8px;margin-bottom:6px;font-size:12px}
 </style>
 </head>
 <body>
 <div class="app">
-<div class="sidebar"><b>TTQ Pro - FIX IDPPS</b><div class="menu" style="margin-top:20px"><a id="m-data" class="active" onclick="showPage('data')">👥 Data Santri</a><a id="m-absen" onclick="showPage('absen')">✅ Absen IDPPS</a><a id="m-laporan" onclick="showPage('laporan')">📊 Rekap</a></div><div style="margin-top:20px;font-size:11px"><span id="jamLive"></span><br><b id="infoCount">0 santri</b></div></div>
+<div class="sidebar"><b>TTQ Pro<br>Enter = Hadir</b><div class="menu" style="margin-top:20px"><a id="m-data" class="active" onclick="showPage('data')">👥 Data Santri</a><a id="m-absen" onclick="showPage('absen')">✅ Absen IDPPS</a><a id="m-laporan" onclick="showPage('laporan')">📊 Rekap</a></div><div style="margin-top:20px;font-size:11px"><span id="jamLive"></span><br><b id="infoCount">0 santri</b></div></div>
 <div class="main">
-<div id="page-data"><div class="card"><h3>FIX: KODE = IDPPS (100% Ikut Excel Mas)</h3><p style="font-size:12px;color:#16a34a;margin-top:6px">Tidak ada lagi TTQ001 - Semua kode pakai IDPPS asli dari Excel!</p><div style="border:2px dashed #064e3b;background:#f0fdf4;padding:15px;border-radius:10px;text-align:center;margin-top:12px"><input type="file" id="fileExcel" accept=".xlsx,.xls,.csv" style="display:none" onchange="importExcel(event)"><button onclick="document.getElementById('fileExcel').click()" class="btn btn-blue">📥 Pilih File Excel Mas</button><button onclick="downloadTemplate()" class="btn" style="background:#f3f4f6">📄 Download Template</button><br><button onclick="hapusSemua()" class="btn btn-red" style="margin-top:12px">🗑️ HAPUS DATA LAMA TTQ001 (13296 error) - KLIK INI DULU!</button><p style="font-size:11px;color:#ef4444;margin-top:5px">Data lama TTQ001 bikin IDPPS 14370680 tidak ketemu - hapus dulu baru import ulang!</p></div></div><div class="card" style="overflow:auto"><table><thead><tr><th>IDPPS (KODE ABSEN)</th><th>Nama</th><th>Domisili</th><th>Kelas</th><th>Tingkat</th></tr></thead><tbody id="tabelSantri"></tbody></table></div></div>
-<div id="page-absen" class="hidden"><div class="card" style="max-width:500px;margin:20px auto;text-align:center"><h2>Masukkan IDPPS</h2><p style="font-size:11px;color:#6b7280;margin:6px 0">Sekarang ketik IDPPS asli dari Excel (contoh: 14370680)</p><input id="kodeAbsen" class="absen-input" placeholder="14370680"><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px"><button onclick="prosesAbsen('Hadir')" class="btn btn-green" style="padding:16px;font-size:16px">✅ Hadir</button><button onclick="prosesAbsen('Izin')" class="btn btn-blue" style="padding:16px">📝 Izin</button></div><div id="hasilAbsen" style="margin-top:15px;padding:14px;border-radius:10px;display:none"></div><div style="margin-top:15px;background:#f9fafb;padding:10px;border-radius:8px;text-align:left;font-size:11px"><b>Cek dulu:</b> IDPPS 14370680 ada di Data Santri? Kalau belum, import ulang Excel nya!</div></div></div>
-<div id="page-laporan" class="hidden"><div class="card"><h3>Rekap - Ada Jam Absen</h3><table><thead><tr><th>Tanggal</th><th>Jam</th><th>IDPPS</th><th>Nama</th><th>Status</th></tr></thead><tbody id="tabelLaporan"></tbody></table><button onclick="exportExcel()" class="btn btn-green" style="margin-top:10px">📥 Export ke Excel</button></div></div>
+<div id="page-data"><div class="card"><h3>Data Santri - IDPPS Jadi Kode</h3><div style="border:2px dashed #064e3b;background:#f0fdf4;padding:12px;border-radius:10px;text-align:center;margin-top:10px"><input type="file" id="fileExcel" accept=".xlsx,.xls,.csv" style="display:none" onchange="importExcel(event)"><button onclick="document.getElementById('fileExcel').click()" class="btn btn-blue">📥 Import Excel</button><button onclick="downloadTemplate()" class="btn" style="background:#f3f4f6">📄 Template</button><button onclick="hapusSemua()" class="btn btn-red" style="margin-left:6px">🗑️ Hapus Semua</button></div></div><div class="card" style="overflow:auto"><table><thead><tr><th>IDPPS</th><th>Nama</th><th>Domisili</th><th>Kelas</th><th>Tingkat</th></tr></thead><tbody id="tabelSantri"></tbody></table></div></div>
+
+<div id="page-absen" class="hidden">
+<div class="card" style="max-width:520px;margin:20px auto;text-align:center">
+<h2>Absen Pakai IDPPS</h2>
+<p style="font-size:12px;color:#6b7280;margin:6px 0">Ketik IDPPS terus <b>ENTER langsung Hadir</b> (gak perlu klik tombol)</p>
+<input id="kodeAbsen" class="absen-input" placeholder="39058" autocomplete="off">
+<p style="font-size:11px;color:#16a34a;margin-top:8px;font-weight:bold">💡 Tips: Ketik IDPPS + tekan ENTER di keyboard / scanner barcode otomatis Hadir!</p>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px">
+<button onclick="prosesAbsen('Hadir')" class="btn btn-green" style="padding:16px;font-size:16px">✅ Hadir (Enter)</button>
+<button onclick="prosesAbsen('Izin')" class="btn btn-blue" style="padding:16px">📝 Izin</button>
+</div>
+<div id="hasilAbsen" style="margin-top:15px;padding:14px;border-radius:10px;display:none"></div>
+<div style="margin-top:12px;text-align:left;background:#f9fafb;padding:12px;border-radius:8px;font-size:11px">
+<b>Fitur baru ENTER:</b><br>
+• Ketik 39058 + ENTER = langsung Hadir + catat jam<br>
+• Cocok untuk scanner barcode / RFID<br>
+• Tidak perlu klik tombol Hadir lagi!
+</div>
+</div>
+</div>
+
+<div id="page-laporan" class="hidden"><div class="card"><h3>Rekap + Jam</h3><table><thead><tr><th>Tanggal</th><th>Jam</th><th>IDPPS</th><th>Nama</th><th>Status</th></tr></thead><tbody id="tabelLaporan"></tbody></table><button onclick="exportExcel()" class="btn btn-green" style="margin-top:10px">📥 Export Excel</button></div></div>
 </div></div>
+
 <script>
 let santri=JSON.parse(localStorage.getItem('FINAL_IDPPS')||'[]');
 let absen=JSON.parse(localStorage.getItem('FINAL_ABSEN')||'[]');
-function showPage(p){document.querySelectorAll('[id^="page-"]').forEach(e=>e.classList.add('hidden'));document.getElementById('page-'+p).classList.remove('hidden');document.querySelectorAll('.menu a').forEach(e=>e.classList.remove('active'));document.getElementById('m-'+p).classList.add('active');loadAll();}
+
+function showPage(p){document.querySelectorAll('[id^="page-"]').forEach(e=>e.classList.add('hidden'));document.getElementById('page-'+p).classList.remove('hidden');document.querySelectorAll('.menu a').forEach(e=>e.classList.remove('active'));document.getElementById('m-'+p).classList.add('active');if(p==='absen')setTimeout(()=>document.getElementById('kodeAbsen').focus(),100);loadAll();}
+
 function save(){localStorage.setItem('FINAL_IDPPS',JSON.stringify(santri));localStorage.setItem('FINAL_ABSEN',JSON.stringify(absen));loadAll();}
-function loadSantri(){document.getElementById('tabelSantri').innerHTML=santri.slice(0,200).map(s=>`<tr><td><span class="code">${s.idpps}</span></td><td>${s.nama}</td><td>${s.domisili}</td><td>${s.kelas}</td><td>${s.tingkat}</td></tr>`).join('')||'<tr><td colspan=5 style="text-align:center;padding:20px;color:#9ca3af">Belum ada data - Import Excel yang ada 14370680</td></tr>';document.getElementById('infoCount').innerText=santri.length+' santri (menampilkan 200)';}
-function hapusSemua(){if(confirm('Hapus '+santri.length+' data lama yang TTQ001? Ini wajib biar IDPPS 14370680 bisa ketemu!')){santri=[];absen=[];localStorage.clear();localStorage.setItem('FINAL_IDPPS','[]');localStorage.setItem('FINAL_ABSEN','[]');save();alert('Sudah bersih! Sekarang import ulang Excel yang ada IDPPS 14370680');}}
+
+function loadSantri(){
+  document.getElementById('tabelSantri').innerHTML=santri.slice(0,300).map(s=>`<tr><td><span class="code">${s.idpps}</span></td><td>${s.nama}</td><td>${s.domisili}</td><td>${s.kelas}</td><td>${s.tingkat}</td></tr>`).join('')||'<tr><td colspan=5 style="text-align:center;padding:20px;color:#9ca3af">Import Excel dulu</td></tr>';
+  document.getElementById('infoCount').innerText=santri.length+' santri';
+}
+
+function hapusSemua(){if(confirm('Hapus semua data?')){santri=[];absen=[];localStorage.setItem('FINAL_IDPPS','[]');localStorage.setItem('FINAL_ABSEN','[]');save();}}
 
 function importExcel(e){
   const file=e.target.files[0];if(!file)return;
@@ -32,40 +59,51 @@ function importExcel(e){
     const data=new Uint8Array(evt.target.result);const wb=XLSX.read(data,{type:'array'});
     const ws=wb.Sheets[wb.SheetNames[0]];const json=XLSX.utils.sheet_to_json(ws,{header:1});
     let count=0;let start=0;
-    if(json.length>0 && json[0][0] && String(json[0][0]).toUpperCase().includes('IDPPS')) start=1;
+    if(json[0]&&String(json[0][0]).toUpperCase().includes('IDPPS'))start=1;
     for(let i=start;i<json.length;i++){
-      const r=json[i];if(!r||r[0]==null||r[0]==='')continue;
-      // PENTING: Excel kadang ubah 14370680 jadi angka - kita paksa jadi string tanpa .0
-      let idpps = String(r[0]).trim().split('.')[0];
-      if(!idpps)continue;
+      const r=json[i];if(!r||r[0]==null||r[0]=='')continue;
+      let idpps=String(r[0]).trim().split('.')[0];
       if(santri.find(s=>String(s.idpps)===idpps))continue;
-      let nama = r[1]?String(r[1]).trim():'-';
-      let domisili = r[2]?String(r[2]).trim():'-';
-      let kelas = r[3]?String(r[3]).trim():'-';
-      let tingkat = r[4]?String(r[4]).trim():'-';
-      santri.push({idpps,nama,domisili,kelas,tingkat});count++;
+      santri.push({idpps,nama:r[1]?String(r[1]).trim():'-',domisili:r[2]?String(r[2]).trim():'-',kelas:r[3]?String(r[3]).trim():'-',tingkat:r[4]?String(r[4]).trim():'-'});count++;
     }
-    save();alert('Berhasil import '+count+' santri! Coba cek di Data Santri ada IDPPS 14370680? Sekarang absen pasti ketemu!');
+    save();alert('Import '+count+' santri berhasil!');
   };
   reader.readAsArrayBuffer(file);
 }
+
 function downloadTemplate(){
-  const ws=XLSX.utils.aoa_to_sheet([['IDPPS','Nama','Domisili','Kelas','Tingkat'],['14370680','Nama Santri Contoh','Pasuruan','2A','Ibtidaiyah'],['39058','MOCH ABID MUHARROR','Mojokerto','2A','Ibtidaiyah']]);
-  const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Data');XLSX.writeFile(wb,'Template-IDPPS-14370680.xlsx');
+  const ws=XLSX.utils.aoa_to_sheet([['IDPPS','Nama','Domisili','Kelas','Tingkat'],['39058','MOCH ABID MUHARROR','Pasuruan','2A','Ibtidaiyah'],['14370680','M. HIDAYATULLOH','Mojokerto','3A','Tsanawiyah']]);
+  const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Data');XLSX.writeFile(wb,'Template-IDPPS.xlsx');
 }
+
 function prosesAbsen(status){
-  const kode=String(document.getElementById('kodeAbsen').value.trim().split('.')[0]);
+  const input=document.getElementById('kodeAbsen');
+  const kode=String(input.value.trim().split('.')[0]);
+  if(!kode){return;}
   const s=santri.find(x=>String(x.idpps).trim()===kode);
   const hasil=document.getElementById('hasilAbsen');
-  if(!s){hasil.style.display='block';hasil.style.background='#fee2e2';hasil.style.color='#991b1b';hasil.innerHTML='❌ IDPPS <b>'+kode+'</b> tidak ditemukan! Cek di menu Data Santri apakah '+kode+' ada? Kalau belum ada, import ulang Excel!';return;}
+  if(!s){hasil.style.display='block';hasil.style.background='#fee2e2';hasil.innerHTML='❌ IDPPS <b>'+kode+'</b> tidak ditemukan!';input.select();return;}
   const today=new Date().toLocaleDateString('id-ID');const now=new Date();const jam=now.toLocaleTimeString('id-ID',{hour12:false});const jamFull=jam+' WIB';
-  if(absen.find(a=>String(a.idpps)===kode&&a.tgl===today)){hasil.style.display='block';hasil.style.background='#fef3c7';hasil.innerHTML='⚠️ '+s.nama+' sudah absen hari ini jam '+absen.find(a=>String(a.idpps)===kode&&a.tgl===today).jam;return;}
+  if(absen.find(a=>String(a.idpps)===kode&&a.tgl===today)){hasil.style.display='block';hasil.style.background='#fef3c7';hasil.innerHTML='⚠️ '+s.nama+' sudah absen jam '+absen.find(a=>String(a.idpps)===kode&&a.tgl===today).jam;input.value='';input.focus();return;}
   absen.push({idpps:s.idpps,nama:s.nama,status,tgl:today,jam,jamFull});save();
-  hasil.style.display='block';hasil.style.background='#dcfce7';hasil.innerHTML='✅ Berhasil!<br><b>'+s.nama+'</b><br>IDPPS: '+s.idpps+'<br>🕐 Jam: '+jamFull+'<br>Status: '+status;
-  document.getElementById('kodeAbsen').value='';
+  hasil.style.display='block';hasil.style.background='#dcfce7';hasil.innerHTML='✅ Berhasil!<br><b>'+s.nama+'</b> (IDPPS: '+s.idpps+')<br>Status: '+status+'<br>🕐 Jam: '+jamFull;
+  input.value='';input.focus();
 }
-function loadAll(){loadSantri();document.getElementById('tabelLaporan').innerHTML=absen.slice().reverse().map(a=>`<tr><td>${a.tgl}</td><td><b>${a.jam}</b></td><td><span class="code">${a.idpps}</span></td><td>${a.nama}</td><td>${a.status}</td></tr>`).join('')||'<tr><td colspan=5 style="text-align:center">Belum ada absen</td></tr>';}
+
+function loadAll(){
+  loadSantri();
+  document.getElementById('tabelLaporan').innerHTML=absen.slice().reverse().map(a=>`<tr><td>${a.tgl}</td><td><b>${a.jam}</b></td><td><span class="code">${a.idpps}</span></td><td>${a.nama}</td><td>${a.status}</td></tr>`).join('')||'<tr><td colspan=5 style="text-align:center">Belum ada absen</td></tr>';
+}
 function exportExcel(){const ws=XLSX.utils.aoa_to_sheet([['Tanggal','Jam','IDPPS','Nama','Status'],...absen.map(a=>[a.tgl,a.jam,a.idpps,a.nama,a.status])]);const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Rekap');XLSX.writeFile(wb,'Rekap.xlsx');}
+
+// FITUR ENTER LANGSUNG HADIR
+document.getElementById('kodeAbsen').addEventListener('keydown',function(e){
+  if(e.key==='Enter'){
+    e.preventDefault();
+    prosesAbsen('Hadir');
+  }
+});
+
 setInterval(()=>{document.getElementById('jamLive').innerText=new Date().toLocaleTimeString('id-ID',{timeZone:'Asia/Jakarta'})+' WIB';},1000);
 loadAll();
 </script>
