@@ -1,279 +1,186 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Presensi TTQ</title>
-
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Absensi TTQ - Pondok Pesantren Sidogiri</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-
 <style>
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0
-}
-
-body{
-    font-family:"Segoe UI",Arial,sans-serif;
-    background:#f5f7fb;
-    color:#1f2937
-}
-
-button,
-input,
-select{
-    font:inherit
-}
-
-button{
-    cursor:pointer
-}
-
-.app{
-    display:flex;
-    min-height:100vh
-}
-
-/* SIDEBAR */
-.sidebar{
-    position:fixed;
-    left:0;
-    top:0;
-    bottom:0;
-    width:250px;
-    background:#fff;
-    border-right:1px solid #e8edf2;
-    padding:22px 14px;
-    z-index:20;
-    overflow-y:auto
-}
-
-.logo{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    padding:4px 8px 18px
-}
-
-.logo-mark{
-    width:42px;
-    height:52px;
-    border:3px solid #087443;
-    clip-path:polygon(50% 0,100% 100%,0 100%);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:#087443;
-    font-size:15px;
-    font-weight:900
-}
-
-.logo-text strong{
-    display:block;
-    color:#086b3e;
-    font-size:15px;
-    line-height:1.1
-}
-
-.logo-text small{
-    display:block;
-    color:#087443;
-    font-size:8px;
-    font-weight:700;
-    margin-top:4px
-}
-
-.app-label{
-    display:inline-block;
-    background:#f1f5f6;
-    color:#48bfd2;
-    border-radius:18px;
-    padding:6px 14px;
-    margin:4px 8px 18px;
-    font-weight:700;
-    font-size:13px
-}
-
-.menu a{
-    display:flex;
-    align-items:center;
-    gap:11px;
-    color:#4b5563;
-    text-decoration:none;
-    padding:12px 14px;
-    border-radius:14px;
-    margin:3px 0;
-    font-size:15px;
-    font-weight:600;
-}
-
-.menu a:hover{
-    background:#f0fbfd
-}
-
-.menu a.active{
-    background:#4dc3d5;
-    color:#fff
-}
-
-.menu a .arrow{
-    margin-left:auto;
-    font-size:18px
-}
-
-.submenu{
-    display:none;
-    padding-left:22px
-}
-
-.submenu.open{
-    display:block
-}
-
-.submenu a{
-    font-weight:500;
-    font-size:14px;
-    padding:9px 12px
-}
-
-/* MAIN */
-.main{
-    margin-left:250px;
-    min-height:100vh;
-    flex:1
-}
-
-.topbar{
-    height:82px;
-    background:#fff;
-    border-bottom:1px solid #e7edf2;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 28px;
-    position:sticky;
-    top:0;
-    z-index:10
-}
-
-.clock{
-    display:flex;
-    gap:22px;
-    font-weight:800;
-    font-family:monospace
-}
-
-.clock .wis{
-    color:#087443
-}
-
-.clock .wib{
-    color:#f97316
-}
-
-.top-actions{
-    display:flex;
-    align-items:center;
-    gap:20px;
-    color:#6b7280
-}
-
-.avatar{
-    width:42px;
-    height:42px;
-    border-radius:12px;
-    background:#263238;
-    color:#fff;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-weight:800
-}
-
-.content{
-    padding:24px
-}
-
-.page{
-    display:none
-}
-
-.page.active{
-    display:block
-}
-
-.card{
-    background:#fff;
-    border-radius:18px;
-    padding:20px;
-    box-shadow:0 5px 18px rgba(15,23,42,.05);
-    border:1px solid #eef1f4
-}
-
-/* KARTU DASHBOARD */
-
-.grid{
-    display:grid;
-    gap:18px
-}
-
-.grid-2{
-    grid-template-columns:repeat(2,1fr)
-}
-
-.stat{
-    min-height:145px;
-    color:#fff;
-    position:relative;
-    overflow:hidden
-}
-
-.stat.green{
-    background:#acd126
-}
-
-.stat.blue{
-    background:#5058df
-}
-
-.stat.red{
-    background:#ff5a42
-}
-
-.stat.yellow{
-    background:#efc43b
-}
-
-.stat .icon{
-    width:52px;
-    height:52px;
-    border-radius:16px;
-    background:#fff;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:24px;
-    margin-bottom:16px
-}
-
-.stat .num{
-    font-size:28px;
-    font-weight:900
-}
-
-.stat .label{
-    font-weight:700
-}
-
-.dashboard-top{
-    display:grid;
-    grid-template-columns:1.05fr 1.3fr .95fr;
-    gap:18px;
-    margin-bottom:18px
-}
-
-/* dan seterusnya... */
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Segoe UI',Arial,sans-serif;background:#f5f7fb;color:#1f2937}
+.app{display:flex;min-height:100vh}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:260px;background:#fff;border-right:1px solid #e8edf2;padding:18px 12px;z-index:10;overflow-y:auto}
+.logo{display:flex;align-items:center;gap:10px;padding:8px 8px 20px;border-bottom:1px solid #f0f4f0;margin-bottom:15px}
+.logo-icon{width:38px;height:38px;background:#087443;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);display:flex;align-items:center;justify-content:center;color:white;font-weight:900}
+.menu-label{font-size:11px;color:#087443;background:#e8f5ee;padding:4px 10px;border-radius:20px;font-weight:bold;margin:10px 8px;display:inline-block}
+.menu a{display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:12px;text-decoration:none;color:#374151;margin-bottom:4px;cursor:pointer;font-size:13px;font-weight:500}
+.menu a.active{background:#00c2d1;color:white}.menu a.active:hover{background:#00b0bd}
+.main{margin-left:260px;flex:1;padding:18px}
+.topbar{display:flex;justify-content:space-between;align-items:center;background:#fff;padding:10px 16px;border-radius:14px;margin-bottom:18px;box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+.topbar-time{font-weight:800;letter-spacing:0.5px}.topbar-time.wis{color:#5a8a00}.topbar-time.wib{color:#d35400;margin-left:15px}
+.grid-dashboard{display:grid;grid-template-columns:300px 1fr 280px;gap:16px}
+.card{background:#fff;border-radius:18px;padding:18px;box-shadow:0 2px 10px rgba(0,0,0,0.05);border:1px solid #eef2f7}
+.card-profile{text-align:center}
+.card-profile img{width:78px;height:78px;border-radius:50%;object-fit:cover;margin:10px 0}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.stat{border-radius:16px;padding:18px;color:white;position:relative;overflow:hidden}
+.stat h1{font-size:26px;margin:6px 0}.stat p{font-size:13px;opacity:0.95}.stat small{font-size:11px;opacity:0.85}
+.stat-green{background:#8ed34f}.stat-blue{background:#4a5bff}.stat-red{background:#ff5a4e}.stat-yellow{background:#f6c63d;color:#5a4100}
+.stat-icon{position:absolute;right:12px;top:14px;width:36px;height:36px;background:rgba(255,255,255,0.9);border-radius:10px;display:flex;align-items:center;justify-content:center}
+.time-card{margin-bottom:14px}.time-card h2{font-size:28px;font-weight:800;letter-spacing:1px}.time-card.wib h2{color:#0ea5e9}.time-card.wis h2{color:#84b300}
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700}
+.absen-input{font-size:34px;text-align:center;font-weight:900;padding:18px;border:3px solid #087443;border-radius:16px;width:100%;letter-spacing:4px;outline:none}.absen-input:focus{border-color:#00c2d1;box-shadow:0 0 0 4px #e0f7f9}
+.btn{padding:12px 18px;border:none;border-radius:12px;font-weight:bold;cursor:pointer}.btn-green{background:#087443;color:white}.btn-cyan{background:#00c2d1;color:white}.hidden{display:none}
+table{width:100%;border-collapse:collapse}th,td{padding:10px;border-bottom:1px solid #f0f4f0;font-size:12px}th{background:#f9fafb;font-size:10px;color:#6b7280;text-transform:uppercase}
+.code{background:#087443;color:white;padding:4px 9px;border-radius:6px;font-family:monospace;font-weight:bold}
+@media(max-width:1100px){.grid-dashboard{grid-template-columns:1fr}.sidebar{position:relative;width:100%}.main{margin-left:0}}
 </style>
 </head>
+<body>
+<div class="app">
+<div class="sidebar">
+<div class="logo"><div class="logo-icon">م</div><div><div style="font-family:serif;font-size:12px;color:#087443;line-height:1">المعهد سيدا جيري</div><b style="font-size:12px;color:#087443">PONDOK PESANTREN SIDOGIRI</b></div></div>
+<div class="menu-label">ABSENSI TTQ</div>
+<div class="menu">
+<a id="m-dashboard" class="active" onclick="showPage('dashboard')">🏠 Dashboard</a>
+<a style="font-size:12px;color:#6b7280;padding-left:30px" onclick="showPage('dashboard')">○ Profil</a>
+<a id="m-data" onclick="showPage('data')">📋 Data Master</a>
+<a id="m-absen" onclick="showPage('absen')">📝 Presensi</a>
+<a id="m-laporan" onclick="showPage('laporan')">📊 Rekap Laporan</a>
+<a onclick="showPage('setting')">⚙️ Setting</a>
+</div>
+<div style="margin-top:30px;padding:12px;background:#f0fdf4;border-radius:12px;font-size:11px">Login: <b>M. HIDAYATULLOH</b><br>TU TTQ - 14370680<br><span id="online" style="color:#22c55e">● Online</span></div>
+</div>
+
+<div class="main">
+<div class="topbar">
+<div style="display:flex;align-items:center;gap:8px"><span style="background:#f3f4f6;padding:6px 10px;border-radius:8px">☰</span><span class="topbar-time wis" id="topWIS">07:06:02 WIS</span><span class="topbar-time wib" id="topWIB">06:23:24 WIB</span></div>
+<div style="display:flex;align-items:center;gap:12px"><span>☁️ 26°C</span><span style="width:32px;height:32px;background:#ddd;border-radius:50%;display:inline-block"></span></div>
+</div>
+
+<div id="page-dashboard">
+<div class="grid-dashboard">
+<!-- PROFILE CARD -->
+<div class="card card-profile">
+<h4 style="text-align:left">Profile</h4>
+<img src="https://i.pravatar.cc/150?img=12" alt="">
+<div style="font-size:13px;color:#6b7280">Selamat Datang</div>
+<b style="font-size:14px;color:#1f2937">M. HIDAYATULLOH</b><div style="font-size:12px;color:#6b7280;margin:4px 0">di Absensi Digital PPS</div>
+<div style="font-size:11px;color:#6b7280">TU TTQ <span class="badge" style="background:#e0f2fe;color:#0284c7">TTQ</span></div>
+<div style="margin:12px 0;display:flex;gap:8px;justify-content:center"><span class="badge" style="background:#dcfce7;color:#16a34a">● Online</span><span class="badge" style="background:#f3f4f6">👁 View Detail</span></div>
+<div style="color:#84b300;font-weight:700;font-size:12px;margin-top:10px" id="hijriDate">SENIN, 24 Rabiul Akhir 1448</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin-top:14px">
+<div style="background:#e0f7f9;padding:8px;border-radius:10px"><b style="color:#00a8b5">2.3K</b><div style="font-size:10px">Anggota</div></div>
+<div style="background:#f3f4f6;padding:8px;border-radius:10px"><b>6</b><div style="font-size:10px">Kegiatan</div></div>
+<div style="background:#fef3c7;padding:8px;border-radius:10px"><b>11</b><div style="font-size:10px">User</div></div>
+<div style="background:#f0fdf4;padding:8px;border-radius:10px"><b style="color:#16a34a">● Aktif</b><div style="font-size:10px">Status</div></div>
+</div>
+</div>
+
+<!-- STATS 4 BOX -->
+<div class="stat-grid">
+<div class="stat stat-green"><div class="stat-icon">✅</div><h1 id="s-hadir">0</h1><p>Hadir Hari Ini</p><small id="s-hadir-p">0% dari total absensi</small></div>
+<div class="stat stat-blue"><div class="stat-icon">📝</div><h1 id="s-izin">0</h1><p>Izin Hari Ini</p><small id="s-izin-p">0% dari total absensi</small></div>
+<div class="stat stat-red"><div class="stat-icon">❌</div><h1 id="s-alpha">0</h1><p>Alpha Hari Ini</p><small id="s-alpha-p">0% dari total absensi</small></div>
+<div class="stat stat-yellow"><div class="stat-icon">📋</div><h1 id="s-total">0</h1><p>Total Peserta Hari Ini</p><small>100% data hari ini</small></div>
+<div class="card" style="grid-column:span 2"><h4>📅 Create Absensi Hari Ini</h4><p style="font-size:11px;color:#6b7280;margin:6px 0">Daftar kegiatan yang telah berhasil dibuat hari ini</p><div id="listAbsen" style="font-size:12px;margin-top:10px">Belum ada absensi, mulai scan IDPPS di menu Presensi!</div></div>
+</div>
+
+<!-- TIME CARDS -->
+<div>
+<div class="card time-card wib">
+<div style="display:flex;justify-content:space-between"><span class="badge" style="background:#e0f2fe;color:#0284c7">☀️ Waktu Indonesia Barat</span><span class="badge" style="background:#f0f9ff">WIB (GMT+7)</span></div>
+<h2 id="jamWIB" style="margin:12px 0 6px 0">06:23:24 <span style="font-size:12px;background:#0ea5e9;color:white;padding:3px 8px;border-radius:6px;vertical-align:middle">WIB</span></h2>
+<div style="font-size:12px;font-weight:600" id="tglWIB">Senin, 05 Oktober 2026 M</div>
+<div style="font-size:11px;color:#6b7280;margin-top:8px">📍 Pasuruan (112.83° E) <span class="badge" style="background:#f0f9ff;float:right">Waktu Standar</span></div>
+</div>
+<div class="card time-card wis" style="background:#f6ffed;border:1px solid #d9f99d">
+<div style="display:flex;justify-content:space-between"><span class="badge" style="background:#ecfccb;color:#65a30d">🌙 Waktu Istiwa' Santri</span><span class="badge" style="background:#f7fee7">WIS (Istiwa)</span></div>
+<h2 id="jamWIS" style="margin:12px 0 6px 0;color:#65a30d">07:06:02 <span style="font-size:12px;background:#84cc16;color:white;padding:3px 8px;border-radius:6px;vertical-align:middle">WIS</span></h2>
+<div style="font-size:12px;font-weight:600;color:#65a30d" id="tglWIS">SENIN, 24 Rabiul Akhir 1448 H</div>
+<div style="font-size:11px;color:#6b7280;margin-top:8px">🌙 Zawwal 12:00 WIS <span class="badge" style="background:#f7fee7;float:right">TA 1447-1448</span></div>
+</div>
+<div class="card"><h4>📌 Kegiatan Aktif <span class="badge" style="background:#f3f4f6;float:right">6 Kegiatan</span></h4><p style="font-size:11px;color:#6b7280;margin:4px 0 12px 0">Daftar kegiatan aktif</p><div style="font-size:12px"><div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f3f4f6"><span>○ Koordinasi Kontroling</span><span class="badge" style="background:#e0f7f9;color:#0891b2">51 Anggota</span></div><div style="display:flex;justify-content:space-between;padding:8px 0"><span>○ Koordinasi Mtq 1</span><span class="badge" style="background:#e0f7f9;color:#0891b2">250 Anggota</span></div></div></div>
+</div>
+</div>
+</div>
+
+<!-- DATA MASTER -->
+<div id="page-data" class="hidden">
+<div class="card"><h3>Data Master - Import IDPPS</h3><p style="font-size:12px;color:#6b7280;margin:8px 0">IDPPS = Kode Absen (bukan TTQ001). Support Enter untuk scan barcode.</p><div style="display:flex;gap:8px;margin-top:12px"><input type="file" id="fileExcel" accept=".xlsx,.xls" style="display:none" onchange="importExcel(event)"><button onclick="document.getElementById('fileExcel').click()" class="btn btn-cyan">📥 Import Excel</button><button onclick="downloadTemplate()" class="btn" style="background:#f3f4f6">📄 Template</button><button onclick="hapusSemua()" class="btn" style="background:#fee2e2;color:#dc2626">🗑️ Hapus</button><span id="count" style="margin-left:10px;font-weight:bold"></span></div></div>
+<div class="card" style="overflow:auto"><table><thead><tr><th>IDPPS</th><th>Nama</th><th>Domisili</th><th>Kelas</th></tr></thead><tbody id="tabel"></tbody></table></div>
+</div>
+
+<!-- PRESENSI - ENTER FIX -->
+<div id="page-absen" class="hidden">
+<div class="card" style="max-width:520px;margin:20px auto;text-align:center">
+<h2>Absen Pakai IDPPS</h2><p style="font-size:12px;color:#6b7280;margin:8px 0">Ketik IDPPS + <b style="color:#087443">ENTER langsung Hadir</b> (gak perlu klik tombol)</p>
+<input id="kodeAbsen" class="absen-input" placeholder="14370680" autocomplete="off" autofocus>
+<p style="font-size:11px;color:#16a34a;margin-top:8px;font-weight:bold">💡 Tips: Scan barcode / ketik + ENTER otomatis Hadir!</p>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px"><button onclick="prosesAbsen('Hadir')" class="btn btn-green" style="padding:16px">✅ Hadir (Enter)</button><button onclick="prosesAbsen('Izin')" class="btn" style="background:#0ea5e9;color:white;padding:16px">📝 Izin</button></div>
+<div id="hasil" style="margin-top:15px;padding:16px;border-radius:14px;display:none"></div>
+</div>
+</div>
+
+<div id="page-laporan" class="hidden">
+<div class="card"><h3>Rekap - Ada Jam WIB & WIS</h3><table><thead><tr><th>Tanggal</th><th>Jam WIB / WIS</th><th>IDPPS</th><th>Nama</th><th>Status</th></tr></thead><tbody id="tabelLap"></tbody></table><button onclick="exportExcel()" class="btn btn-green" style="margin-top:12px">📥 Export Excel</button></div>
+</div>
+
+</div></div>
+
+<script>
+let santri=JSON.parse(localStorage.getItem('FINAL_IDPPS')||'[]');let absen=JSON.parse(localStorage.getItem('FINAL_ABSEN')||'[]');
+function showPage(p){document.querySelectorAll('[id^="page-"]').forEach(e=>e.classList.add('hidden'));document.getElementById('page-'+p).classList.remove('hidden');document.querySelectorAll('.menu a').forEach(e=>e.classList.remove('active'));let el=document.getElementById('m-'+p);if(el)el.classList.add('active');if(p==='absen')setTimeout(()=>document.getElementById('kodeAbsen').focus(),150);load();}
+function save(){localStorage.setItem('FINAL_IDPPS',JSON.stringify(santri));localStorage.setItem('FINAL_ABSEN',JSON.stringify(absen));load();}
+function load(){
+ document.getElementById('tabel').innerHTML=santri.slice(0,200).map(s=>`<tr><td><span class="code">${s.idpps}</span></td><td>${s.nama}</td><td>${s.domisili||'-'}</td><td>${s.kelas||'-'}</td></tr>`).join('')||'<tr><td colspan=4 style="text-align:center;padding:20px;color:#9ca3af">Belum ada data</td></tr>';
+ document.getElementById('count').innerText=santri.length+' santri';
+ const today=new Date().toLocaleDateString('id-ID');const todayAbsen=absen.filter(a=>a.tgl===today);
+ document.getElementById('s-hadir').innerText=todayAbsen.filter(a=>a.status==='Hadir').length;
+ document.getElementById('s-izin').innerText=todayAbsen.filter(a=>a.status==='Izin').length;
+ document.getElementById('s-alpha').innerText=Math.max(0,santri.length-todayAbsen.length);
+ document.getElementById('s-total').innerText=santri.length;
+ document.getElementById('listAbsen').innerHTML=todayAbsen.slice(-4).reverse().map(a=>`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f3f4f6"><span><span class="code" style="font-size:11px">${a.idpps}</span> ${a.nama}</span><span>${a.jam} <b style="color:#22c55e">${a.status}</b></span></div>`).join('')||'Belum ada absensi hari ini. Scan di menu Presensi!';
+ document.getElementById('tabelLap').innerHTML=absen.slice().reverse().map(a=>`<tr><td>${a.tgl}</td><td><b>${a.jam}</b><br><small style="color:#65a30d">${a.jamWIS||''}</small></td><td><span class="code">${a.idpps}</span></td><td>${a.nama}</td><td><span style="background:#dcfce7;padding:3px 8px;border-radius:10px;font-size:11px">${a.status}</span></td></tr>`).join('')||'<tr><td colspan=5 style="text-align:center">Belum ada</td></tr>';
+}
+function importExcel(e){
+ const file=e.target.files[0];if(!file)return;const reader=new FileReader();
+ reader.onload=function(evt){
+  const wb=XLSX.read(new Uint8Array(evt.target.result),{type:'array'});const ws=wb.Sheets[wb.SheetNames[0]];const json=XLSX.utils.sheet_to_json(ws,{header:1});
+  let start=json[0]&&String(json[0][0]).toUpperCase().includes('IDPPS')?1:0;let c=0;
+  for(let i=start;i<json.length;i++){let r=json[i];if(!r||!r[0])continue;let id=String(r[0]).split('.')[0].trim();if(!id||santri.find(s=>String(s.idpps)===id))continue;santri.push({idpps:id,nama:r[1]?String(r[1]).trim():'-',domisili:r[2]?String(r[2]).trim():'-',kelas:r[3]?String(r[3]).trim():'-'});c++;}
+  save();alert('Import '+c+' santri! IDPPS jadi kode, ENTER langsung hadir!');
+ };reader.readAsArrayBuffer(file);
+}
+function downloadTemplate(){const ws=XLSX.utils.aoa_to_sheet([['IDPPS','Nama','Domisili','Kelas'],['14370680','M. HIDAYATULLOH','Pasuruan','3A'],['39058','MOCH ABID','Mojokerto','2A']]);const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Data');XLSX.writeFile(wb,'Template-Sidogiri-IDPPS.xlsx');}
+function hapusSemua(){if(confirm('Hapus semua?')){santri=[];absen=[];save();}}
+function prosesAbsen(status){
+ const el=document.getElementById('kodeAbsen');const kode=String(el.value.trim().split('.')[0]);if(!kode)return;
+ const s=santri.find(x=>String(x.idpps)===kode);const h=document.getElementById('hasil');
+ if(!s){h.style.display='block';h.style.background='#fee2e2';h.innerHTML='❌ IDPPS '+kode+' tidak ditemukan!';el.select();return;}
+ const today=new Date().toLocaleDateString('id-ID');const now=new Date();const jamWIB=now.toLocaleTimeString('id-ID',{hour12:false})+' WIB';
+ const wisDate=new Date(now.getTime()+43*60000);const jamWIS=wisDate.toLocaleTimeString('id-ID',{hour12:false})+' WIS';
+ if(absen.find(a=>String(a.idpps)===kode&&a.tgl===today)){h.style.display='block';h.style.background='#fef3c7';h.innerHTML='⚠️ '+s.nama+' sudah absen jam '+absen.find(a=>String(a.idpps)===kode&&a.tgl===today).jam;el.value='';el.focus();return;}
+ absen.push({idpps:s.idpps,nama:s.nama,status,tgl:today,jam:jamWIB,jamWIS});save();
+ h.style.display='block';h.style.background='#dcfce7';h.innerHTML='✅ Berhasil!<br><b>'+s.nama+'</b> (IDPPS: '+s.idpps+')<br>Status: '+status+'<br>🕐 <b>'+jamWIB+'</b> | 🌙 '+jamWIS;
+ el.value='';el.focus();
+}
+function exportExcel(){const ws=XLSX.utils.aoa_to_sheet([['Tanggal','Jam WIB','Jam WIS','IDPPS','Nama','Status'],...absen.map(a=>[a.tgl,a.jam,a.jamWIS,a.idpps,a.nama,a.status])]);const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Rekap');XLSX.writeFile(wb,'Rekap-Sidogiri-'+new Date().toISOString().slice(0,10)+'.xlsx');}
+
+// ENTER = HADIR - KUNCI UTAMA
+document.getElementById('kodeAbsen').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();prosesAbsen('Hadir');}});
+
+// JAM REALTIME WIB & WIS
+setInterval(()=>{
+ const now=new Date();
+ const wib=now.toLocaleTimeString('id-ID',{hour12:false,timeZone:'Asia/Jakarta'});
+ const wis=new Date(now.getTime()+43*60000).toLocaleTimeString('id-ID',{hour12:false,timeZone:'Asia/Jakarta'});
+ document.getElementById('jamWIB').innerHTML=wib+' <span style="font-size:12px;background:#0ea5e9;color:white;padding:3px 8px;border-radius:6px">WIB</span>';
+ document.getElementById('jamWIS').innerHTML=wis+' <span style="font-size:12px;background:#84cc16;color:white;padding:3px 8px;border-radius:6px">WIS</span>';
+ document.getElementById('topWIB').innerText=wib+' WIB';document.getElementById('topWIS').innerText=wis+' WIS';
+ const tgl=now.toLocaleDateString('id-ID',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
+ document.getElementById('tglWIB').innerText=tgl+' M';
+},1000);
+
+load();
+</script>
+</body>
+</html>
