@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistem Absensi TTQ - Hidayat</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+body{background:#f5f7fb;min-height:100vh}
+.login-wrap{max-width:400px;margin:80px auto;background:white;padding:30px;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,0.1)}
+.login-wrap h2{text-align:center;color:#064e3b;margin-bottom:5px}
+.login-wrap p{text-align:center;color:#6b7280;font-size:13px;margin-bottom:25px}
+.input{width:100%;padding:14px;border:1.5px solid #e5e7eb;border-radius:12px;margin-bottom:12px;font-size:14px}
+.btn{width:100%;padding:14px;border:none;border-radius:12px;font-weight:bold;cursor:pointer;font-size:14px}
+.btn-green{background:#064e3b;color:white}
+.btn-blue{background:#0ea5e9;color:white}
+.hidden{display:none}
+.app{display:flex;min-height:100vh}
+.sidebar{width:260px;background:white;border-right:1px solid #e5e7eb;padding:20px;position:fixed;height:100vh}
+.menu a{display:block;padding:12px 15px;border-radius:10px;text-decoration:none;color:#374151;margin-bottom:5px;cursor:pointer}
+.menu a.active{background:#064e3b;color:white}
+.main{margin-left:260px;flex:1;padding:25px}
+.card{background:white;border-radius:16px;padding:20px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin-bottom:20px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:20px}
+.stat{padding:20px;border-radius:16px;color:white;text-align:center}
+.stat h2{font-size:28px;margin:5px 0}
+table{width:100%;border-collapse:collapse;margin-top:15px}
+th,td{padding:12px;text-align:left;border-bottom:1px solid #f3f4f6;font-size:13px}
+th{background:#f9fafb;font-size:11px;color:#6b7280}
+.badge{padding:4px 10px;border-radius:20px;font-size:11px}
+.badge-green{background:#dcfce7;color:#16a34a}
+.badge-red{background:#fee2e2;color:#dc2626}
+.badge-blue{background:#dbeafe;color:#2563eb}
+.code{font-family:monospace;background:#f3f4f6;padding:4px 8px;border-radius:6px;font-weight:bold;color:#064e3b}
+.absen-box{max-width:500px;margin:30px auto;text-align:center}
+.absen-input{font-size:28px;text-align:center;letter-spacing:5px;font-weight:bold;padding:20px;border:3px solid #064e3b;border-radius:16px;width:100%}
+@media(max-width:900px){.app{flex-direction:column}.sidebar{position:relative;width:100%;height:auto}.main{margin-left:0}.stats{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginPage" class="login-wrap">
+  <div style="width:60px;height:60px;background:#064e3b;border-radius:15px;margin:0 auto 15px;display:flex;align-items:center;justify-content:center;color:white;font-size:30px">م</div>
+  <h2>Absensi TTQ Sidogiri</h2>
+  <p>Versi Hidayat - Pasuruan</p>
+  <input id="user" class="input" placeholder="Username: admin">
+  <input id="pass" class="input" type="password" placeholder="Password: 12345">
+  <button onclick="login()" class="btn btn-green">Masuk Dashboard</button>
+  <p style="margin-top:15px;font-size:11px">Demo: admin / 12345</p>
+  <div id="loginError" style="color:red;font-size:12px;margin-top:10px;text-align:center;display:none">Username / Password salah!</div>
+</div>
+
+<!-- APP -->
+<div id="app" class="app hidden">
+  <div class="sidebar">
+    <div style="display:flex;gap:10px;align-items:center;margin-bottom:20px"><div style="width:40px;height:40px;background:#064e3b;border-radius:8px;display:flex;align-items:center;justify-content:center;color:white;font-weight:bold">H</div><b>TTQ<br>Hidayat</b></div>
+    <div class="menu">
+      <a id="m-dashboard" class="active" onclick="showPage('dashboard')">🏠 Dashboard</a>
+      <a id="m-data" onclick="showPage('data')">👥 Data Santri</a>
+      <a id="m-absen" onclick="showPage('absen')">✅ Absen Kode</a>
+      <a id="m-laporan" onclick="showPage('laporan')">📊 Laporan</a>
+      <a onclick="logout()" style="margin-top:30px;color:#ef4444">🚪 Keluar</a>
+    </div>
+    <div style="margin-top:20px;padding:12px;background:#f0fdf4;border-radius:10px;font-size:11px">Login: <b>Hidayat</b><br><span id="jamLive">--:--:-- WIB</span></div>
+  </div>
+
+  <div class="main">
+    <!-- DASHBOARD -->
+    <div id="page-dashboard">
+      <h2>Dashboard Hari Ini - <span id="tgl"></span></h2>
+      <div class="stats">
+        <div class="stat" style="background:#22c55e"><p>Hadir</p><h2 id="s-hadir">0</h2></div>
+        <div class="stat" style="background:#6366f1"><p>Izin</p><h2 id="s-izin">0</h2></div>
+        <div class="stat" style="background:#ef4444"><p>Alpha</p><h2 id="s-alpha">0</h2></div>
+        <div class="stat" style="background:#f59e0b;color:#422006"><p>Total Santri</p><h2 id="s-total">0</h2></div>
+      </div>
+      <div class="card"><h3>Absensi Terbaru Hari Ini</h3><div id="listTerbaru">Belum ada absen</div></div>
+    </div>
+
+    <!-- DATA -->
+    <div id="page-data" class="hidden">
+      <div class="card">
+        <h3>Tambah Data Santri Baru</h3>
+        <p style="font-size:12px;color:#6b7280;margin:5px 0 15px 0">Data ini akan otomatis dapat KODE untuk absen</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <input id="nama" class="input" placeholder="Nama Lengkap">
+          <input id="kelas" class="input" placeholder="Kelas / Kamar (misal: 2A)">
+        </div>
+        <button onclick="tambahSantri()" class="btn btn-green" style="margin-top:10px">+ Simpan & Buat Kode</button>
+      </div>
+      <div class="card">
+        <h3>Daftar Santri & Kode Absen</h3>
+        <table><thead><tr><th>KODE</th><th>Nama</th><th>Kelas</th><th>Aksi</th></tr></thead><tbody id="tabelSantri"></tbody></table>
+      </div>
+    </div>
+
+    <!-- ABSEN -->
+    <div id="page-absen" class="hidden">
+      <div class="card absen-box">
+        <h2>Masukkan Kode Absen</h2>
+        <p style="font-size:12px;color:#6b7280;margin:10px 0 20px 0">Kode didapat dari menu Data Santri (contoh: TTQ001)</p>
+        <input id="kodeAbsen" class="absen-input" placeholder="TTQ001" maxlength="10">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:15px">
+          <button onclick="prosesAbsen('Hadir')" class="btn btn-green">✅ Hadir</button>
+          <button onclick="prosesAbsen('Izin')" class="btn btn-blue">📝 Izin</button>
+        </div>
+        <div id="hasilAbsen" style="margin-top:20px;padding:15px;border-radius:12px;display:none"></div>
+        <p style="font-size:11px;color:#9ca3af;margin-top:15px">Tips: Coba buat data santri dulu di menu Data Santri</p>
+      </div>
+    </div>
+
+    <!-- LAPORAN -->
+    <div id="page-laporan" class="hidden">
+      <div class="card"><h3>Laporan Lengkap</h3><button onclick="exportCSV()" class="btn btn-green" style="width:auto;padding:8px 15px;font-size:12px;margin-top:10px">📥 Download CSV</button><table><thead><tr><th>Waktu</th><th>Kode</th><th>Nama</th><th>Status</th></tr></thead><tbody id="tabelLaporan"></tbody></table></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// DATA SIMPAN DI HP
+let santri = JSON.parse(localStorage.getItem('ttq_santri')||'[]');
+let absen = JSON.parse(localStorage.getItem('ttq_absen')||'[]');
+
+function login(){
+  if(document.getElementById('user').value==='admin' && document.getElementById('pass').value==='12345'){
+    document.getElementById('loginPage').classList.add('hidden');
+    document.getElementById('app').classList.remove('hidden');
+    loadAll();
+  } else {
+    document.getElementById('loginError').style.display='block';
+  }
+}
+function logout(){location.reload()}
+
+function showPage(p){
+  document.querySelectorAll('[id^="page-"]').forEach(e=>e.classList.add('hidden'));
+  document.getElementById('page-'+p).classList.remove('hidden');
+  document.querySelectorAll('.menu a').forEach(e=>e.classList.remove('active'));
+  document.getElementById('m-'+p).classList.add('active');
+  if(p==='dashboard'||p==='laporan') loadAll();
+}
+
+function tambahSantri(){
+  const nama=document.getElementById('nama').value.trim();
+  const kelas=document.getElementById('kelas').value.trim();
+  if(!nama) return alert('Isi nama!');
+  const kode='TTQ'+String(santri.length+1).padStart(3,'0');
+  santri.push({kode,nama,kelas});
+  localStorage.setItem('ttq_santri',JSON.stringify(santri));
+  document.getElementById('nama').value=''; document.getElementById('kelas').value='';
+  loadSantri(); alert('Berhasil! Kode untuk '+nama+' adalah: '+kode);
+}
+
+function loadSantri(){
+  const tbody=document.getElementById('tabelSantri');
+  tbody.innerHTML=santri.map(s=>`<tr><td><span class="code">${s.kode}</span></td><td>${s.nama}</td><td>${s.kelas}</td><td><button onclick="hapusSantri('${s.kode}')" style="color:red;border:none;background:none;cursor:pointer">Hapus</button></td></tr>`).join('')||'<tr><td colspan=4 style="text-align:center;color:#9ca3af">Belum ada data - tambah di atas</td></tr>';
+  document.getElementById('s-total').innerText=santri.length;
+}
+function hapusSantri(kode){
+  if(confirm('Hapus '+kode+'?')){ santri=santri.filter(s=>s.kode!==kode); localStorage.setItem('ttq_santri',JSON.stringify(santri)); loadSantri(); }
+}
+
+function prosesAbsen(status){
+  const kode=document.getElementById('kodeAbsen').value.toUpperCase().trim();
+  const hasil=document.getElementById('hasilAbsen');
+  const s=santri.find(x=>x.kode===kode);
+  if(!s){ hasil.style.display='block'; hasil.style.background='#fee2e2'; hasil.innerHTML=`❌ Kode <b>${kode}</b> tidak ditemukan! Cek di Data Santri`; return; }
+  const today=new Date().toLocaleDateString('id-ID');
+  if(absen.find(a=>a.kode===kode && a.tgl===today)){ hasil.style.display='block'; hasil.style.background='#fef3c7'; hasil.innerHTML=`⚠️ ${s.nama} sudah absen hari ini!`; return; }
+  const jam=new Date().toLocaleTimeString('id-ID');
+  absen.push({kode,nama:s.nama,kelas:s.kelas,status,tgl:today,jam});
+  localStorage.setItem('ttq_absen',JSON.stringify(absen));
+  hasil.style.display='block'; hasil.style.background='#dcfce7';
+  hasil.innerHTML=`✅ Berhasil!<br><b>${s.nama}</b> (${s.kode})<br>Status: <span class="badge badge-green">${status}</span><br><small>${today} ${jam}</small>`;
+  document.getElementById('kodeAbsen').value=''; loadAll();
+}
+
+function loadAll(){
+  loadSantri();
+  const today=new Date().toLocaleDateString('id-ID');
+  const todayAbsen=absen.filter(a=>a.tgl===today);
+  document.getElementById('s-hadir').innerText=todayAbsen.filter(a=>a.status==='Hadir').length;
+  document.getElementById('s-izin').innerText=todayAbsen.filter(a=>a.status==='Izin').length;
+  document.getElementById('s-alpha').innerText=Math.max(0,santri.length-todayAbsen.length);
+  document.getElementById('tgl').innerText=today;
+  document.getElementById('listTerbaru').innerHTML=todayAbsen.slice(-5).reverse().map(a=>`<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f3f4f6"><span><span class="code">${a.kode}</span> ${a.nama}</span><span class="badge ${a.status==='Hadir'?'badge-green':'badge-blue'}">${a.status} ${a.jam}</span></div>`).join('')||'Belum ada absen hari ini';
+  document.getElementById('tabelLaporan').innerHTML=absen.slice().reverse().map(a=>`<tr><td>${a.tgl} ${a.jam}</td><td><span class="code">${a.kode}</span></td><td>${a.nama}</td><td><span class="badge ${a.status==='Hadir'?'badge-green':'badge-blue'}">${a.status}</span></td></tr>`).join('')||'<tr><td colspan=4 style="text-align:center">Belum ada data</td></tr>';
+}
+
+function exportCSV(){
+  let csv='Tanggal,Jam,Kode,Nama,Kelas,Status\n'+absen.map(a=>`${a.tgl},${a.jam},${a.kode},${a.nama},${a.kelas},${a.status}`).join('\n');
+  let blob=new Blob([csv],{type:'text/csv'}); let url=URL.createObjectURL(blob);
+  let a=document.createElement('a'); a.href=url; a.download='laporan-absensi-hidayat.csv'; a.click();
+}
+
+setInterval(()=>{ document.getElementById('jamLive').innerText=new Date().toLocaleTimeString('id-ID',{timeZone:'Asia/Jakarta'})+' WIB'; },1000);
+</script>
+</body>
+</html>
