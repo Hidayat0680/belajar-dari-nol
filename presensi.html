@@ -1,71 +1,279 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Presensi ENTER FIX</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Presensi TTQ</title>
+
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}body{background:#f5f7fb}.app{display:flex;min-height:100vh}.sidebar{width:240px;background:white;padding:20px;position:fixed;height:100vh}.menu a{display:block;padding:11px;border-radius:10px;text-decoration:none;color:#374151;margin-bottom:4px;cursor:pointer}.menu a.active{background:#064e3b;color:white}.main{margin-left:240px;flex:1;padding:20px}.card{background:white;border-radius:16px;padding:20px;box-shadow:0 4px 12px rgba(0,0,0,0.05)}.absen-input{font-size:36px;text-align:center;font-weight:900;padding:20px;border:4px solid #064e3b;border-radius:16px;width:100%;letter-spacing:4px;outline:none}.btn{padding:14px;border:none;border-radius:12px;font-weight:bold;cursor:pointer}.btn-green{background:#064e3b;color:white}.btn-blue{background:#0ea5e9;color:white}.code{background:#064e3b;color:white;padding:4px 10px;border-radius:6px;font-family:monospace}.hidden{display:none}
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0
+}
+
+body{
+    font-family:"Segoe UI",Arial,sans-serif;
+    background:#f5f7fb;
+    color:#1f2937
+}
+
+button,
+input,
+select{
+    font:inherit
+}
+
+button{
+    cursor:pointer
+}
+
+.app{
+    display:flex;
+    min-height:100vh
+}
+
+/* SIDEBAR */
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    width:250px;
+    background:#fff;
+    border-right:1px solid #e8edf2;
+    padding:22px 14px;
+    z-index:20;
+    overflow-y:auto
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:4px 8px 18px
+}
+
+.logo-mark{
+    width:42px;
+    height:52px;
+    border:3px solid #087443;
+    clip-path:polygon(50% 0,100% 100%,0 100%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#087443;
+    font-size:15px;
+    font-weight:900
+}
+
+.logo-text strong{
+    display:block;
+    color:#086b3e;
+    font-size:15px;
+    line-height:1.1
+}
+
+.logo-text small{
+    display:block;
+    color:#087443;
+    font-size:8px;
+    font-weight:700;
+    margin-top:4px
+}
+
+.app-label{
+    display:inline-block;
+    background:#f1f5f6;
+    color:#48bfd2;
+    border-radius:18px;
+    padding:6px 14px;
+    margin:4px 8px 18px;
+    font-weight:700;
+    font-size:13px
+}
+
+.menu a{
+    display:flex;
+    align-items:center;
+    gap:11px;
+    color:#4b5563;
+    text-decoration:none;
+    padding:12px 14px;
+    border-radius:14px;
+    margin:3px 0;
+    font-size:15px;
+    font-weight:600;
+}
+
+.menu a:hover{
+    background:#f0fbfd
+}
+
+.menu a.active{
+    background:#4dc3d5;
+    color:#fff
+}
+
+.menu a .arrow{
+    margin-left:auto;
+    font-size:18px
+}
+
+.submenu{
+    display:none;
+    padding-left:22px
+}
+
+.submenu.open{
+    display:block
+}
+
+.submenu a{
+    font-weight:500;
+    font-size:14px;
+    padding:9px 12px
+}
+
+/* MAIN */
+.main{
+    margin-left:250px;
+    min-height:100vh;
+    flex:1
+}
+
+.topbar{
+    height:82px;
+    background:#fff;
+    border-bottom:1px solid #e7edf2;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 28px;
+    position:sticky;
+    top:0;
+    z-index:10
+}
+
+.clock{
+    display:flex;
+    gap:22px;
+    font-weight:800;
+    font-family:monospace
+}
+
+.clock .wis{
+    color:#087443
+}
+
+.clock .wib{
+    color:#f97316
+}
+
+.top-actions{
+    display:flex;
+    align-items:center;
+    gap:20px;
+    color:#6b7280
+}
+
+.avatar{
+    width:42px;
+    height:42px;
+    border-radius:12px;
+    background:#263238;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:800
+}
+
+.content{
+    padding:24px
+}
+
+.page{
+    display:none
+}
+
+.page.active{
+    display:block
+}
+
+.card{
+    background:#fff;
+    border-radius:18px;
+    padding:20px;
+    box-shadow:0 5px 18px rgba(15,23,42,.05);
+    border:1px solid #eef1f4
+}
+
+/* KARTU DASHBOARD */
+
+.grid{
+    display:grid;
+    gap:18px
+}
+
+.grid-2{
+    grid-template-columns:repeat(2,1fr)
+}
+
+.stat{
+    min-height:145px;
+    color:#fff;
+    position:relative;
+    overflow:hidden
+}
+
+.stat.green{
+    background:#acd126
+}
+
+.stat.blue{
+    background:#5058df
+}
+
+.stat.red{
+    background:#ff5a42
+}
+
+.stat.yellow{
+    background:#efc43b
+}
+
+.stat .icon{
+    width:52px;
+    height:52px;
+    border-radius:16px;
+    background:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:24px;
+    margin-bottom:16px
+}
+
+.stat .num{
+    font-size:28px;
+    font-weight:900
+}
+
+.stat .label{
+    font-weight:700
+}
+
+.dashboard-top{
+    display:grid;
+    grid-template-columns:1.05fr 1.3fr .95fr;
+    gap:18px;
+    margin-bottom:18px
+}
+
+/* dan seterusnya... */
 </style>
 </head>
-<body>
-<div class="app">
-<div class="sidebar"><b>ENTER = HADIR</b><div class="menu" style="margin-top:20px"><a id="m-data" class="active" onclick="showPage('data')">👥 Data</a><a id="m-absen" onclick="showPage('absen')">✅ Absen</a><a id="m-laporan" onclick="showPage('laporan')">📊 Rekap</a></div><div id="info" style="margin-top:20px;font-size:11px"></div></div>
-<div class="main">
-<div id="page-data"><div class="card"><input type="file" id="fileExcel" accept=".xlsx,.xls" style="display:none" onchange="importExcel(event)"><button onclick="document.getElementById('fileExcel').click()" style="padding:10px 16px;background:#0ea5e9;color:white;border:none;border-radius:8px;font-weight:bold">📥 Import Excel</button> <span id="count"></span></div><div class="card"><table style="width:100%"><thead><tr><th>IDPPS</th><th>Nama</th></tr></thead><tbody id="tabel"></tbody></table></div></div>
-<div id="page-absen" class="hidden"><div class="card" style="max-width:480px;margin:30px auto;text-align:center">
-<h2 style="font-size:28px">Masukkan IDPPS</h2><p style="color:#6b7280;font-size:13px;margin:8px 0 15px 0">Ketik IDPPS + <b style="color:#064e3b">TEKAN ENTER = LANGSUNG HADIR</b></p>
-<input id="kodeAbsen" class="absen-input" type="text" inputmode="numeric" placeholder="14370680" autocomplete="off" autofocus>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:15px"><button onclick="prosesAbsen('Hadir')" class="btn btn-green">✅ Hadir</button><button onclick="prosesAbsen('Izin')" class="btn btn-blue">📝 Izin</button></div>
-<div id="hasil" style="margin-top:15px;padding:15px;border-radius:12px;display:none"></div>
-<p style="margin-top:15px;font-size:12px;background:#f0fdf4;padding:10px;border-radius:8px">⌨️ <b>ENTER</b> = Hadir otomatis + jam tercatat</p>
-</div></div>
-<div id="page-laporan" class="hidden"><div class="card"><table style="width:100%"><thead><tr><th>Tanggal</th><th>Jam</th><th>IDPPS</th><th>Nama</th><th>Status</th></tr></thead><tbody id="tabelLap"></tbody></table></div></div>
-</div></div>
-<script>
-let santri=JSON.parse(localStorage.getItem('FINAL_IDPPS')||'[]');let absen=JSON.parse(localStorage.getItem('FINAL_ABSEN')||'[]');
-function showPage(p){document.querySelectorAll('[id^="page-"]').forEach(e=>e.classList.add('hidden'));document.getElementById('page-'+p).classList.remove('hidden');document.querySelectorAll('.menu a').forEach(e=>e.classList.remove('active'));document.getElementById('m-'+p).classList.add('active');if(p==='absen')setTimeout(()=>document.getElementById('kodeAbsen').focus(),200);}
-function save(){localStorage.setItem('FINAL_IDPPS',JSON.stringify(santri));localStorage.setItem('FINAL_ABSEN',JSON.stringify(absen));load();}
-function load(){document.getElementById('tabel').innerHTML=santri.slice(0,100).map(s=>`<tr><td><span class="code">${s.idpps}</span></td><td>${s.nama}</td></tr>`).join('');document.getElementById('count').innerText=santri.length+' santri';document.getElementById('tabelLap').innerHTML=absen.slice().reverse().map(a=>`<tr><td>${a.tgl}</td><td><b>${a.jam}</b></td><td>${a.idpps}</td><td>${a.nama}</td><td>${a.status}</td></tr>`).join('');document.getElementById('info').innerText=santri.length+' santri';}
-
-function importExcel(e){
- const file=e.target.files[0];const reader=new FileReader();
- reader.onload=function(evt){
-  const wb=XLSX.read(new Uint8Array(evt.target.result),{type:'array'});const ws=wb.Sheets[wb.SheetNames[0]];const json=XLSX.utils.sheet_to_json(ws,{header:1});
-  let start=json[0][0]&&String(json[0][0]).toUpperCase().includes('IDPPS')?1:0;
-  for(let i=start;i<json.length;i++){let r=json[i];if(!r||!r[0])continue;let id=String(r[0]).split('.')[0].trim();if(santri.find(s=>String(s.idpps)===id))continue;santri.push({idpps:id,nama:r[1]?String(r[1]).trim():'-'});}
-  save();alert('Import '+santri.length+' berhasil!');
- };
- reader.readAsArrayBuffer(file);
-}
-
-function prosesAbsen(status){
- const el=document.getElementById('kodeAbsen');const kode=String(el.value.trim().split('.')[0]);if(!kode)return;
- const s=santri.find(x=>String(x.idpps)===kode);const h=document.getElementById('hasil');
- if(!s){h.style.display='block';h.style.background='#fee2e2';h.innerHTML='❌ IDPPS '+kode+' tidak ada!';el.select();return;}
- const today=new Date().toLocaleDateString('id-ID');const jam=new Date().toLocaleTimeString('id-ID',{hour12:false})+' WIB';
- if(absen.find(a=>String(a.idpps)===kode&&a.tgl===today)){h.style.display='block';h.style.background='#fef3c7';h.innerHTML='⚠️ Sudah absen jam '+absen.find(a=>String(a.idpps)===kode&&a.tgl===today).jam;el.value='';el.focus();return;}
- absen.push({idpps:s.idpps,nama:s.nama,status,tgl:today,jam});save();
- h.style.display='block';h.style.background='#dcfce7';h.innerHTML='✅ Berhasil!<br><b>'+s.nama+'</b> (IDPPS: '+s.idpps+')<br>Status: '+status+'<br>🕐 Jam: '+jam;
- el.value='';el.focus();
-}
-
-// INI KUNCINYA - ENTER LANGSUNG HADIR
-const inputKode = document.getElementById('kodeAbsen');
-inputKode.addEventListener('keydown', function(event) {
-  if (event.key === 'Enter') {
-    event.preventDefault();
-    prosesAbsen('Hadir');
-  }
-});
-inputKode.addEventListener('keyup', function(event) {
-  if (event.key === 'Enter') {
-    event.preventDefault();
-    prosesAbsen('Hadir');
-  }
-});
-
-load();
-</script>
-</body>
-</html>
