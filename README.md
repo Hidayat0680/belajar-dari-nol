@@ -8,7 +8,7 @@ Repo ini adalah bukti bahwa saya berani mulai dari laptop ASUS Vivobook saya.
 ## Target saya:
 - [x] Bikin akun GitHub pertama (04 Okt 2026)
 - [x] Bikin repo pertama `belajar-dari-nol`
-- [ ] Bikin program pertama Python
+- [x] Bikin program pertama Python
 - [ ] Bikin website pertama
 
 > "Mulai aja dulu, sempurna belakangan."
